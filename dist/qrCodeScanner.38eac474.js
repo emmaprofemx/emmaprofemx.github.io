@@ -118,7 +118,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/qrCodeScanner.js":[function(require,module,exports) {
-var qrcode = window.qrcode;
+var qrCodeLib = window.qrcode;
 var video = document.createElement("video");
 var canvasElement = document.getElementById("qr-canvas");
 var canvas = canvasElement.getContext("2d");
@@ -126,7 +126,7 @@ var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
 var scanning = false;
-qrcode.callback = function (res) {
+qrCodeLib.callback = function (res) {
   if (res) {
     outputData.innerText = res;
     scanning = false;
@@ -163,7 +163,7 @@ function tick() {
 }
 function scan() {
   try {
-    qrcode.decode();
+    qrCodeLib.decode();
   } catch (e) {
     setTimeout(scan, 300);
   }
