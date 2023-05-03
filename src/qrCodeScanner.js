@@ -1,6 +1,5 @@
 // Asegúrate de que solo tengas una declaración de qrcode en este archivo.
 const qrcode = window.qrcode;
-
 const video = document.createElement("video");
 const canvasElement = document.getElementById("qr-canvas");
 const canvas = canvasElement.getContext("2d");
@@ -8,8 +7,12 @@ const canvas = canvasElement.getContext("2d");
 const qrResult = document.getElementById("qr-result");
 const outputData = document.getElementById("outputData");
 const btnScanQR = document.getElementById("btn-scan-qr");
-
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 let scanning = false;
+
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+}
 
 qrcode.callback = res => {
   if (res) {

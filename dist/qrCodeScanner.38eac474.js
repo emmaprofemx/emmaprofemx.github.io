@@ -126,7 +126,11 @@ var canvas = canvasElement.getContext("2d");
 var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 var scanning = false;
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+}
 qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
