@@ -127,6 +127,18 @@ var btnScanQR = document.getElementById("btn-scan-qr");
 var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
 var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+qrcode.callback = function (res) {
+  if (res) {
+    outputData.innerText = res;
+    scanning = false;
+    video.srcObject.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    qrResult.hidden = false;
+    canvasElement.hidden = true;
+    btnScanQR.hidden = false;
+  }
+};
 if (isMobile) {
   // Si es un dispositivo móvil, comprobar si tiene cámara frontal
   navigator.mediaDevices.getUserMedia({

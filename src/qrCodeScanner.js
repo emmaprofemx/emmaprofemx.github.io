@@ -8,6 +8,20 @@ const btnSwitchCamera = document.getElementById("btn-switch-camera");
 let scanning = false;
 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+qrcode.callback = res => {
+  if (res) {
+    outputData.innerText = res;
+    scanning = false;
+
+    video.srcObject.getTracks().forEach(track => {
+      track.stop();
+    });
+
+    qrResult.hidden = false;
+    canvasElement.hidden = true;
+    btnScanQR.hidden = false;
+  }
+};
 if (isMobile) {
   // Si es un dispositivo móvil, comprobar si tiene cámara frontal
   navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
