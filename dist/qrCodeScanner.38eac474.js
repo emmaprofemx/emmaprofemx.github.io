@@ -128,7 +128,7 @@ var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
 var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
-var isFrontCamera = false; // Variable que indica si la cámara frontal está activa o no
+var isFrontCamera = true; // Variable que indica si la cámara frontal está activa o no
 var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 if (isMobile) {
   btnSwitchCamera.hidden = false;

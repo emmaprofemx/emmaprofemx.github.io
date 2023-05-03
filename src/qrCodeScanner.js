@@ -10,7 +10,7 @@ const btnScanQR = document.getElementById("btn-scan-qr");
 const btnSwitchCamera = document.getElementById("btn-switch-camera");
 
 let scanning = false;
-let isFrontCamera = false; // Variable que indica si la cámara frontal está activa o no
+let isFrontCamera = true; // Variable que indica si la cámara frontal está activa o no
 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 if (isMobile) {
   btnSwitchCamera.hidden = false;
