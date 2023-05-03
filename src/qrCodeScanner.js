@@ -37,8 +37,9 @@ if (isMobile) {
 }
 
 btnScanQR.onclick = () => {
+  const constraints = { video: { facingMode: { exact: "environment" } } };
   navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: "environment" } })
+    .getUserMedia(constraints)
     .then(function(stream) {
       scanning = true;
       qrResult.hidden = true;
@@ -53,7 +54,7 @@ btnScanQR.onclick = () => {
 };
 
 btnSwitchCamera.onclick = () => {
-  let constraints = { video: { facingMode: "user" } };
+  const constraints = { video: { facingMode: { exact: "user" } } };
   navigator.mediaDevices
     .getUserMedia(constraints)
     .then(function(stream) {
@@ -61,6 +62,7 @@ btnSwitchCamera.onclick = () => {
       video.play();
     });
 };
+
 
 function tick() {
   canvasElement.height = video.videoHeight;

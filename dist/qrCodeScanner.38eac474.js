@@ -155,11 +155,14 @@ if (isMobile) {
   btnSwitchCamera.hidden = true;
 }
 btnScanQR.onclick = function () {
-  navigator.mediaDevices.getUserMedia({
+  var constraints = {
     video: {
-      facingMode: "environment"
+      facingMode: {
+        exact: "environment"
+      }
     }
-  }).then(function (stream) {
+  };
+  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
     scanning = true;
     qrResult.hidden = true;
     btnScanQR.hidden = true;
@@ -174,7 +177,9 @@ btnScanQR.onclick = function () {
 btnSwitchCamera.onclick = function () {
   var constraints = {
     video: {
-      facingMode: "user"
+      facingMode: {
+        exact: "user"
+      }
     }
   };
   navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
