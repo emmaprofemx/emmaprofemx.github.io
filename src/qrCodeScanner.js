@@ -1,29 +1,17 @@
-const qrCodeLib = window.qrcode;
-
+const qrcode = window.qrcode;
 const video = document.createElement("video");
 const canvasElement = document.getElementById("qr-canvas");
 const canvas = canvasElement.getContext("2d");
-
 const qrResult = document.getElementById("qr-result");
 const outputData = document.getElementById("outputData");
 const btnScanQR = document.getElementById("btn-scan-qr");
-
+const btnSwitchCamera = document.getElementById("btn-switch-camera");
 let scanning = false;
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-qrCodeLib.callback = res => {
-  if (res) {
-    outputData.innerText = res;
-    scanning = false;
-
-    video.srcObject.getTracks().forEach(track => {
-      track.stop();
-    });
-
-    qrResult.hidden = false;
-    canvasElement.hidden = true;
-    btnScanQR.hidden = false;
-  }
-};
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+}
 
 btnScanQR.onclick = () => {
   navigator.mediaDevices
@@ -41,17 +29,26 @@ btnScanQR.onclick = () => {
     });
 };
 
+btnSwitchCamera.onclick = () => {
+  let constraints = { video: { facingMode: "user" } };
+  navigator.mediaDevices
+    .getUserMedia(constraints)
+    .then(function(stream) {
+      video.srcObject = stream;
+      video.play();
+    });
+};
+
 function tick() {
   canvasElement.height = video.videoHeight;
   canvasElement.width = video.videoWidth;
   canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-
   scanning && requestAnimationFrame(tick);
 }
 
 function scan() {
   try {
-    qrCodeLib.decode();
+    qrcode.decode();
   } catch (e) {
     setTimeout(scan, 300);
   }

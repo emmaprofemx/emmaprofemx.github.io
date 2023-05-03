@@ -118,7 +118,8 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/qrCodeScanner.js":[function(require,module,exports) {
-var qrCodeLib = window.qrcode;
+// Asegúrate de que solo tengas una declaración de qrcode en este archivo.
+var qrcode = window.qrcode;
 var video = document.createElement("video");
 var canvasElement = document.getElementById("qr-canvas");
 var canvas = canvasElement.getContext("2d");
@@ -126,7 +127,7 @@ var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
 var scanning = false;
-qrCodeLib.callback = function (res) {
+qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
     scanning = false;
@@ -163,7 +164,7 @@ function tick() {
 }
 function scan() {
   try {
-    qrCodeLib.decode();
+    qrcode.decode();
   } catch (e) {
     setTimeout(scan, 300);
   }
