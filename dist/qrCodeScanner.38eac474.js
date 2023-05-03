@@ -119,7 +119,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   return newRequire;
 })({"src/qrCodeScanner.js":[function(require,module,exports) {
 // Asegúrate de que solo tengas una declaración de qrcode en este archivo.
-var qrcode = window.qrcode;
+
 var video = document.createElement("video");
 var canvasElement = document.getElementById("qr-canvas");
 var canvas = canvasElement.getContext("2d");
