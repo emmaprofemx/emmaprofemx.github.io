@@ -1,4 +1,3 @@
-// Asegúrate de que solo tengas una declaración de qrcode en este archivo.
 const qrcode = window.qrcode;
 
 const video = document.createElement("video");
