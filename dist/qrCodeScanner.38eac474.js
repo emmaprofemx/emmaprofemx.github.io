@@ -126,11 +126,10 @@ var canvas = canvasElement.getContext("2d");
 var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
-var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
-if (isMobile) {
-  btnSwitchCamera.hidden = false;
-}
+var isFrontCamera = false; // Variable que indica si la cámara frontal está activa o no
+
 qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
@@ -144,9 +143,11 @@ qrcode.callback = function (res) {
   }
 };
 btnScanQR.onclick = function () {
+  var facingMode = isFrontCamera ? "user" : "environment"; // Si la cámara frontal está activa, cambia el modo de la cámara a "user"
+
   navigator.mediaDevices.getUserMedia({
     video: {
-      facingMode: "environment"
+      facingMode: facingMode
     }
   }).then(function (stream) {
     scanning = true;
@@ -158,6 +159,19 @@ btnScanQR.onclick = function () {
     video.play();
     tick();
     scan();
+  });
+};
+btnSwitchCamera.onclick = function () {
+  var constraints = {
+    video: {
+      facingMode: isFrontCamera ? "environment" : "user"
+    }
+  }; // Si la cámara frontal está activa, cambia el modo de la cámara a "environment"
+  isFrontCamera = !isFrontCamera; // Cambia el valor de la variable isFrontCamera
+
+  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+    video.srcObject = stream;
+    video.play();
   });
 };
 function tick() {
