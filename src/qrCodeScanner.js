@@ -1,36 +1,20 @@
 const video = document.createElement("video");
 const canvasElement = document.getElementById("qr-canvas");
 const canvas = canvasElement.getContext("2d");
-
 const qrResult = document.getElementById("qr-result");
 const outputData = document.getElementById("outputData");
 const btnScanQR = document.getElementById("btn-scan-qr");
-
-const btnToggleCamera = document.createElement("button");
-btnToggleCamera.innerText = "Cambiar a cámara frontal";
-document.body.appendChild(btnToggleCamera);
-
+const btnSwitchCamera = document.getElementById("btn-switch-camera");
 let scanning = false;
-let currentCamera = "environment";
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-qrcode.callback = res => {
-  if (res) {
-    outputData.innerText = res;
-    scanning = false;
-
-    video.srcObject.getTracks().forEach(track => {
-      track.stop();
-    });
-
-    qrResult.hidden = false;
-    canvasElement.hidden = true;
-    btnScanQR.hidden = false;
-  }
-};
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+}
 
 btnScanQR.onclick = () => {
   navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: currentCamera } })
+    .getUserMedia({ video: { facingMode: "environment" } })
     .then(function(stream) {
       scanning = true;
       qrResult.hidden = true;
@@ -44,16 +28,10 @@ btnScanQR.onclick = () => {
     });
 };
 
-btnToggleCamera.onclick = () => {
-  currentCamera = currentCamera === "user" ? "environment" : "user";
-  btnToggleCamera.innerText = currentCamera === "user" ? "Cambiar a cámara trasera" : "Cambiar a cámara frontal";
-
-  video.srcObject.getTracks().forEach(track => {
-    track.stop();
-  });
-
+btnSwitchCamera.onclick = () => {
+  let constraints = { video: { facingMode: "user" } };
   navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: currentCamera } })
+    .getUserMedia(constraints)
     .then(function(stream) {
       video.srcObject = stream;
       video.play();
@@ -64,7 +42,6 @@ function tick() {
   canvasElement.height = video.videoHeight;
   canvasElement.width = video.videoWidth;
   canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-
   scanning && requestAnimationFrame(tick);
 }
 

@@ -124,27 +124,16 @@ var canvas = canvasElement.getContext("2d");
 var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
-var btnToggleCamera = document.createElement("button");
-btnToggleCamera.innerText = "Cambiar a cámara frontal";
-document.body.appendChild(btnToggleCamera);
+var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
-var currentCamera = "environment";
-qrcode.callback = function (res) {
-  if (res) {
-    outputData.innerText = res;
-    scanning = false;
-    video.srcObject.getTracks().forEach(function (track) {
-      track.stop();
-    });
-    qrResult.hidden = false;
-    canvasElement.hidden = true;
-    btnScanQR.hidden = false;
-  }
-};
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+}
 btnScanQR.onclick = function () {
   navigator.mediaDevices.getUserMedia({
     video: {
-      facingMode: currentCamera
+      facingMode: "environment"
     }
   }).then(function (stream) {
     scanning = true;
@@ -158,17 +147,13 @@ btnScanQR.onclick = function () {
     scan();
   });
 };
-btnToggleCamera.onclick = function () {
-  currentCamera = currentCamera === "user" ? "environment" : "user";
-  btnToggleCamera.innerText = currentCamera === "user" ? "Cambiar a cámara trasera" : "Cambiar a cámara frontal";
-  video.srcObject.getTracks().forEach(function (track) {
-    track.stop();
-  });
-  navigator.mediaDevices.getUserMedia({
+btnSwitchCamera.onclick = function () {
+  var constraints = {
     video: {
-      facingMode: currentCamera
+      facingMode: "user"
     }
-  }).then(function (stream) {
+  };
+  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
     video.srcObject = stream;
     video.play();
   });
