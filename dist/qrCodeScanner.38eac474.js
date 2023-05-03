@@ -129,7 +129,23 @@ var btnScanQR = document.getElementById("btn-scan-qr");
 var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
 var isFrontCamera = false; // Variable que indica si la cámara frontal está activa o no
-
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+  btnSwitchCamera.hidden = false;
+  // Si es un dispositivo móvil, comprobar si tiene cámara frontal
+  navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: "user"
+    }
+  }).then(function () {
+    btnSwitchCamera.hidden = false; // Mostrar el botón si tiene cámara frontal
+  }).catch(function () {
+    btnSwitchCamera.hidden = true; // Ocultar el botón si no tiene cámara frontal
+  });
+} else {
+  // Si no es un dispositivo móvil, ocultar el botón
+  btnSwitchCamera.hidden = true;
+}
 qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
