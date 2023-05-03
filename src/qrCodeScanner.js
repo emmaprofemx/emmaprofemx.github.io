@@ -6,7 +6,12 @@ const qrResult = document.getElementById("qr-result");
 const outputData = document.getElementById("outputData");
 const btnScanQR = document.getElementById("btn-scan-qr");
 
+const btnToggleCamera = document.createElement("button");
+btnToggleCamera.innerText = "Cambiar a cámara frontal";
+document.body.appendChild(btnToggleCamera);
+
 let scanning = false;
+let currentCamera = "environment";
 
 qrcode.callback = res => {
   if (res) {
@@ -25,7 +30,7 @@ qrcode.callback = res => {
 
 btnScanQR.onclick = () => {
   navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: "environment" } })
+    .getUserMedia({ video: { facingMode: currentCamera } })
     .then(function(stream) {
       scanning = true;
       qrResult.hidden = true;
@@ -36,6 +41,22 @@ btnScanQR.onclick = () => {
       video.play();
       tick();
       scan();
+    });
+};
+
+btnToggleCamera.onclick = () => {
+  currentCamera = currentCamera === "user" ? "environment" : "user";
+  btnToggleCamera.innerText = currentCamera === "user" ? "Cambiar a cámara trasera" : "Cambiar a cámara frontal";
+
+  video.srcObject.getTracks().forEach(track => {
+    track.stop();
+  });
+
+  navigator.mediaDevices
+    .getUserMedia({ video: { facingMode: currentCamera } })
+    .then(function(stream) {
+      video.srcObject = stream;
+      video.play();
     });
 };
 

@@ -124,7 +124,11 @@ var canvas = canvasElement.getContext("2d");
 var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
+var btnToggleCamera = document.createElement("button");
+btnToggleCamera.innerText = "Cambiar a cámara frontal";
+document.body.appendChild(btnToggleCamera);
 var scanning = false;
+var currentCamera = "environment";
 qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
@@ -140,7 +144,7 @@ qrcode.callback = function (res) {
 btnScanQR.onclick = function () {
   navigator.mediaDevices.getUserMedia({
     video: {
-      facingMode: "environment"
+      facingMode: currentCamera
     }
   }).then(function (stream) {
     scanning = true;
@@ -152,6 +156,21 @@ btnScanQR.onclick = function () {
     video.play();
     tick();
     scan();
+  });
+};
+btnToggleCamera.onclick = function () {
+  currentCamera = currentCamera === "user" ? "environment" : "user";
+  btnToggleCamera.innerText = currentCamera === "user" ? "Cambiar a cámara trasera" : "Cambiar a cámara frontal";
+  video.srcObject.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: currentCamera
+    }
+  }).then(function (stream) {
+    video.srcObject = stream;
+    video.play();
   });
 };
 function tick() {
