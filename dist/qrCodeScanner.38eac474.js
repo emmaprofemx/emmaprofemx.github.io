@@ -118,7 +118,6 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/qrCodeScanner.js":[function(require,module,exports) {
-var qrcode = window.qrcode;
 var video = document.createElement("video");
 var canvasElement = document.getElementById("qr-canvas");
 var canvas = canvasElement.getContext("2d");
@@ -193,7 +192,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61526" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62674" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
