@@ -118,15 +118,15 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/qrCodeScanner.js":[function(require,module,exports) {
+// Asegúrate de que solo tengas una declaración de qrcode en este archivo.
+var qrcode = window.qrcode;
 var video = document.createElement("video");
 var canvasElement = document.getElementById("qr-canvas");
 var canvas = canvasElement.getContext("2d");
 var qrResult = document.getElementById("qr-result");
 var outputData = document.getElementById("outputData");
 var btnScanQR = document.getElementById("btn-scan-qr");
-var btnSwitchCamera = document.getElementById("btn-switch-camera");
 var scanning = false;
-var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 qrcode.callback = function (res) {
   if (res) {
     outputData.innerText = res;
@@ -139,30 +139,12 @@ qrcode.callback = function (res) {
     btnScanQR.hidden = false;
   }
 };
-if (isMobile) {
-  // Si es un dispositivo móvil, comprobar si tiene cámara frontal
+btnScanQR.onclick = function () {
   navigator.mediaDevices.getUserMedia({
     video: {
-      facingMode: "user"
+      facingMode: "environment"
     }
-  }).then(function () {
-    btnSwitchCamera.hidden = false; // Mostrar el botón si tiene cámara frontal
-  }).catch(function () {
-    btnSwitchCamera.hidden = true; // Ocultar el botón si no tiene cámara frontal
-  });
-} else {
-  // Si no es un dispositivo móvil, ocultar el botón
-  btnSwitchCamera.hidden = true;
-}
-btnScanQR.onclick = function () {
-  var constraints = {
-    video: {
-      facingMode: {
-        exact: "environment"
-      }
-    }
-  };
-  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+  }).then(function (stream) {
     scanning = true;
     qrResult.hidden = true;
     btnScanQR.hidden = true;
@@ -172,19 +154,6 @@ btnScanQR.onclick = function () {
     video.play();
     tick();
     scan();
-  });
-};
-btnSwitchCamera.onclick = function () {
-  var constraints = {
-    video: {
-      facingMode: {
-        exact: "user"
-      }
-    }
-  };
-  navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-    video.srcObject = stream;
-    video.play();
   });
 };
 function tick() {
